@@ -1,0 +1,92 @@
+[
+  {
+    "firstName": "Filmore",
+    "lastName": "Magovern",
+    "email": "fmagovern0@studiopress.com",
+    "gender": "Male",
+    "country": "Kazakhstan",
+    "city": "Oytal",
+    "address": "9199 Buhler Terrace"
+  },
+  {
+    "firstName": "Elsey",
+    "lastName": "Waterstone",
+    "email": "ewaterstone1@bandcamp.com",
+    "gender": "Female",
+    "country": "Venezuela",
+    "city": "Capacho Nuevo",
+    "address": "17114 Towne Pass"
+  },
+  {
+    "firstName": "Myrwyn",
+    "lastName": "Stocky",
+    "email": "mstocky2@hud.gov",
+    "gender": "Male",
+    "country": "United States",
+    "city": "Tampa",
+    "address": "909 Lighthouse Bay Hill"
+  },
+  {
+    "firstName": "Alta",
+    "lastName": "Joinsey",
+    "email": "ajoinsey3@ask.com",
+    "gender": "Female",
+    "country": "Sweden",
+    "city": "Fagersta",
+    "address": "78914 Bunker Hill Avenue"
+  },
+  {
+    "firstName": "Ignatius",
+    "lastName": "McKern",
+    "email": "imckern4@symantec.com",
+    "gender": "Male",
+    "country": "France",
+    "city": "Paris 16",
+    "address": "7 Sutteridge Plaza"
+  },
+  {
+    "firstName": "Astra",
+    "lastName": "Holdworth",
+    "email": "aholdworth5@spotify.com",
+    "gender": "Female",
+    "country": "Philippines",
+    "city": "Giporlos",
+    "address": "95 Holmberg Lane"
+  },
+  {
+    "firstName": "Laurens",
+    "lastName": "Lorraway",
+    "email": "llorraway6@alexa.com",
+    "gender": "Male",
+    "country": "Russia",
+    "city": "Uchkulan",
+    "address": "21753 School Terrace"
+  },
+  {
+    "firstName": "William",
+    "lastName": "Iuorio",
+    "email": "wiuorio7@paypal.com",
+    "gender": "Male",
+    "country": "Brazil",
+    "city": "São Gotardo",
+    "address": "6054 Arrowood Terrace"
+  },
+  {
+    "firstName": "Olenolin",
+    "lastName": "Bolf",
+    "email": "obolf8@blogs.com",
+    "gender": "Male",
+    "country": "China",
+    "city": "Yongtai",
+    "address": "80898 Parkside Street"
+  },
+  {
+    "firstName": "Randene",
+    "lastName": "Turri",
+    "email": "rturri9@mapquest.com",
+    "gender": "Female",
+    "country": "North Korea",
+    "city": "Kosan",
+    "address": "7 Mitchell Park"
+  }
+]
