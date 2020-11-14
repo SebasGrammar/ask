@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
+const { ObjectId } = Schema;
 const geocoder = require('../utils/geocoder');
 
 const UserSchema = new Schema({
@@ -40,6 +41,14 @@ const UserSchema = new Schema({
   address: {
     type: String,
     required: [true, 'Please add an address.']
+  },
+  country: {
+    type: String,
+    require: [true, 'What country do you live in?']
+  },
+  city: {
+    type: String,
+    require: [true, 'What city do you live in?']
   },
   //   location: {
   //     // GeoJSON Point
@@ -85,9 +94,13 @@ const UserSchema = new Schema({
     default: Date.now
   },
 
-  askedQuestions: {
-    // Would it be convenient to put this in the database? I don't think so... maybe I can use virtuals here?
-  },
+  askedQuestions: [
+    {
+      // Would it be convenient to put this in the database? I don't think so... maybe I can use virtuals here?}
+      type: ObjectId,
+      ref: 'Thread'
+    }
+  ],
   answeredQuestions: {},
   savedQuestions: {}
 });
@@ -138,6 +151,8 @@ UserSchema.pre('save', function (next) {
       };
 
       this.address = undefined;
+      this.country = undefined;
+      this.city = undefined; // I should refactor this... find a way to prevent repeating so much code.
 
       next();
     });
