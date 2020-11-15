@@ -102,7 +102,12 @@ const UserSchema = new Schema({
     }
   ],
   answeredQuestions: {},
-  savedQuestions: {}
+  savedQuestions: [
+    {
+      type: ObjectId,
+      ref: 'Thread'
+    }
+  ]
 });
 
 // Okay... I already know why the code below is not working as expected. As you can see,

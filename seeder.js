@@ -24,9 +24,6 @@ const resources = JSON.parse(
 
 const importData = async () => {
   try {
-    // console.log(resources);
-    // console.log(User);
-
     await User.create(resources);
     console.log('Data imported.');
     // process.exit(); // This line here is the reason why the averageCost wasn't being updated after importing the data through the seeder. I wonder why?

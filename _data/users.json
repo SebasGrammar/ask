@@ -98,5 +98,15 @@
     "city": "Kosan",
     "address": "7 Mitchell Park",
     "_id": "5fae19b2c38cc616401b304c"
+  },
+  {
+    "firstName": "Sebastian",
+    "lastName": "Palacio",
+    "email": "sebasgrammar@hotmail.com",
+    "gender": "Male",
+    "country": "Colombia",
+    "city": "Medellín",
+    "address": "Medellín - Colombia, Cra 29 # 47 - 86",
+    "_id": "5faf1130b8e5df2bccaa87d4"
   }
 ]
