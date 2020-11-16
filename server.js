@@ -18,10 +18,12 @@ app.use(express.json());
 // Get routes
 const users = require('./routes/users');
 const threads = require('./routes/threads');
+const answers = require('./routes/answers');
 
 // Mount routes
 app.use('/api/v1/users', users);
 app.use('/api/v1/threads', threads);
+app.use('/api/v1/answers', answers);
 
 connectDB();
 

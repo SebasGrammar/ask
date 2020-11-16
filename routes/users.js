@@ -11,6 +11,7 @@ const {
 
 // Resource routes
 const threadRouter = require('./threads');
+const answerRouter = require('./answers');
 
 // Re-route into other resouce routes
 router.use('/:userId/threads', threadRouter); // this is going to run at the root level in the threads router ('/').
@@ -20,6 +21,7 @@ router.use('/:userId/threads', threadRouter); // this is going to run at the roo
 // This is because we don't want routes that are not directly related to users here. It's better to use a re-router like we did above
 // than to do what's below.
 // router.route('/:id/threads').get(getThreads);
+router.use('/:userId/answers', answerRouter);
 
 router.route('/').get(getUsers).post(createUser);
 

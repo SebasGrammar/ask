@@ -1,6 +1,7 @@
 const { findByIdAndUpdate } = require('../models/Thread');
 const Thread = require('../models/Thread');
 const User = require('../models/User');
+const Answer = require('../models/Answer');
 
 // Or should it be /api/v1/users/:userId/threads ? DONE. Did this by merging parameters.
 
@@ -88,7 +89,41 @@ exports.updateThread = async (req, res) => {
   });
 };
 
-// @desc   Create thread
+// // @desc   Save thread // What about answer Thread? it should definitely be a post request, too! it could be something like... if req.body, that means it's an answer. Otherwise, it's a save therad request.
+// // @route  POST /api/v1/threads/:id
+// // @access Private
+// exports.saveThread = async (req, res) => {
+//   const loggedInUser = '5faf1130b8e5df2bccaa87d4'; // Sebas
+
+//   let user = await User.findById(loggedInUser);
+
+//   user.savedQuestions.push(req.params.id);
+
+//   // user = await user.populate({
+//   //   path: 'savedQuestions'
+//   // });
+
+//   // const savedQuestions = await user.savedQuestions.populate({
+//   //   path: 'savedQuestions'
+//   // });
+
+//   res.status(200).json({
+//     success: true,
+//     data: await user.populate({
+//       path: 'savedQuestions'
+//     })
+//   });
+
+//   // Here's how to do the same with then:
+//   // user.populate({ path: 'savedQuestions' }).then((data) => {
+//   //   res.status(200).json({
+//   //     success: true,
+//   //     data
+//   //   });
+//   // });
+// };
+
+// @desc   Save thread // What about answer Thread? it should definitely be a post request, too! it could be something like... if req.body, that means it's an answer. Otherwise, it's a save therad request.
 // @route  POST /api/v1/threads/:id
 // @access Private
 exports.saveThread = async (req, res) => {
@@ -96,28 +131,21 @@ exports.saveThread = async (req, res) => {
 
   let user = await User.findById(loggedInUser);
 
-  user.savedQuestions.push(req.params.id);
+  if (!Object.keys(req.body).length) {
+    // Check if req.body is empty. If it is, that means the user clicked on save thread (or something equivalent).
+    // The fact that it's empty means, of course, that it's not an answer.
+    console.log('The body is empty. Just save the thread. ');
+    user.savedQuestions.push(req.params.id);
 
-  // user = await user.populate({
-  //   path: 'savedQuestions'
-  // });
-
-  // const savedQuestions = await user.savedQuestions.populate({
-  //   path: 'savedQuestions'
-  // });
-
-  res.status(200).json({
-    success: true,
-    data: await user.populate({
-      path: 'savedQuestions'
-    })
-  });
-
-  // Here's how to do the same with then:
-  // user.populate({ path: 'savedQuestions' }).then((data) => {
-  //   res.status(200).json({
-  //     success: true,
-  //     data
-  //   });
-  // });
+    res.status(200).json({
+      success: true,
+      data: await user.populate({
+        path: 'savedQuestions'
+      })
+    });
+  } else {
+    // Now... of course I have to find a way to save the answers, too. And for that, I'm gonna have to use an Answer model.
+    user.answeredQuestions.push(req.params.id);
+    // Come to think of it... I don't think it's a good idea to have question-related functionality here in the threads controller...
+  }
 };
