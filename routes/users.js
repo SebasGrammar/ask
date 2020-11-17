@@ -14,17 +14,18 @@ const threadRouter = require('./threads');
 const answerRouter = require('./answers');
 
 // Re-route into other resouce routes
-router.use('/:userId/threads', threadRouter); // this is going to run at the root level in the threads router ('/').
+router.use('/:username/threads', threadRouter); // this is going to run at the root level in the threads router ('/').
 // This would be the same as 'threads'. However, we are getting additional info from the 'parent route', which is 'users/:userId'.
 // That is, we have access to 'users' and ':userId' from the root in threads.
 
 // This is because we don't want routes that are not directly related to users here. It's better to use a re-router like we did above
 // than to do what's below.
 // router.route('/:id/threads').get(getThreads);
-router.use('/:userId/answers', answerRouter);
+router.use('/:username/answers', answerRouter);
+router.use('/:username/answers/:threadId', answerRouter); // This one's hard...
 
 router.route('/').get(getUsers).post(createUser);
 
-router.route('/:id').get(getUser).put(updateUser).delete(deleteUser);
+router.route('/:username').get(getUser).put(updateUser).delete(deleteUser);
 
 module.exports = router;

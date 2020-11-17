@@ -7,11 +7,22 @@ const ThreadSchema = new Schema({
     type: String,
     required: [true, 'You must add a title to your thread.']
   },
+  // author: {
+  //   type: ObjectId,
+  //   ref: 'User',
+  //   required: true
+  // },
   author: {
-    type: ObjectId,
+    type: String,
     ref: 'User',
     required: true
-  }
+  },
+  submittedAnswers: [
+    {
+      type: ObjectId,
+      ref: 'Answer'
+    }
+  ]
 });
 
 module.exports = model('Thread', ThreadSchema);

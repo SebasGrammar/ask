@@ -4,6 +4,8 @@ const dotenv = require('dotenv');
 
 // Models
 const User = require('./models/User');
+const Thread = require('./models/Thread');
+const Answer = require('./models/Answer');
 
 // Load env variables
 dotenv.config({
@@ -18,13 +20,23 @@ mongoose.connect(process.env.MONGO_URI, {
   useFindAndModify: false
 });
 
-const resources = JSON.parse(
+const users = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/users.json`, 'utf-8')
+);
+
+const threads = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/threads.json`, 'utf-8')
+);
+
+const answers = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/answers.json`, 'utf-8')
 );
 
 const importData = async () => {
   try {
-    await User.create(resources);
+    await User.create(users); // Refactor this! :D
+    await Thread.create(threads);
+    await Answer.create(answers);
     console.log('Data imported.');
     // process.exit(); // This line here is the reason why the averageCost wasn't being updated after importing the data through the seeder. I wonder why?
     // setTimeout?
@@ -37,6 +49,8 @@ const importData = async () => {
 const deleteData = async () => {
   try {
     await User.deleteMany();
+    await Thread.deleteMany();
+    await Answer.deleteMany();
     console.log('Data deleted.');
     process.exit();
   } catch (error) {

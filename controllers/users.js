@@ -14,10 +14,14 @@ exports.getUsers = async (req, res) => {
 };
 
 // @desc   Get a single user
-// @route  GET /api/v1/users/:id
+// @route  GET /api/v1/users/:username
 // @access Public
 exports.getUser = async (req, res) => {
-  const user = await User.findById(req.params.id); // Need to create an error handler
+  // const user = await User.findById(req.params.id); // Need to create an error handler
+  console.log(req.params.username);
+  const user = await User.find({
+    username: req.params.username
+  });
   res.status(200).json({
     success: true,
     data: user

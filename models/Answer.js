@@ -3,6 +3,7 @@ const { Schema, model } = mongoose;
 const { ObjectId } = Schema;
 
 const AnswerSchema = new Schema({
+  title: String, // Perhaps this is not necessary at all!
   content: {
     type: String,
     required: true
@@ -13,10 +14,15 @@ const AnswerSchema = new Schema({
     required: true
   },
   author: {
-    type: ObjectId,
+    type: String,
     ref: 'User',
     required: true
   }
+  // author: {
+  //   type: ObjectId,
+  //   ref: 'User',
+  //   required: true
+  // }
 });
 
 module.exports = model('Answer', AnswerSchema);

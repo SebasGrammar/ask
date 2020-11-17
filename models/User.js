@@ -12,6 +12,12 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "We'd like to know what your last name is."]
   },
+  username: {
+    type: String,
+    required: [true, 'Please enter a username.'],
+    unique: true
+  },
+  slug: String,
   email: {
     type: String,
     required: [true, 'Please add an email.'],
@@ -101,7 +107,12 @@ const UserSchema = new Schema({
       ref: 'Thread'
     }
   ],
-  answeredQuestions: {},
+  answeredQuestions: [
+    {
+      type: ObjectId,
+      ref: 'Thread'
+    }
+  ],
   savedQuestions: [
     {
       type: ObjectId,
