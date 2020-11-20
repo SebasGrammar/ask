@@ -18,11 +18,6 @@ const AnswerSchema = new Schema({
     ref: 'User',
     required: true
   }
-  // author: {
-  //   type: ObjectId,
-  //   ref: 'User',
-  //   required: true
-  // }
 });
 
 module.exports = model('Answer', AnswerSchema);

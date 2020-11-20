@@ -8,7 +8,8 @@
     "country": "Kazakhstan",
     "city": "Oytal",
     "address": "9199 Buhler Terrace",
-    "_id": "5fae19b2c38cc616401b304f"
+    "_id": "5fae19b2c38cc616401b304f",
+    "password": "123456"
   },
   {
     "firstName": "Elsey",
@@ -19,7 +20,8 @@
     "country": "Venezuela",
     "city": "Capacho Nuevo",
     "address": "17114 Towne Pass",
-    "_id": "5fae19b2c38cc616401b304b"
+    "_id": "5fae19b2c38cc616401b304b",
+    "password": "123456"
   },
   {
     "firstName": "Myrwyn",
@@ -30,7 +32,8 @@
     "country": "United States",
     "city": "Tampa",
     "address": "909 Lighthouse Bay Hill",
-    "_id": "5fae19b2c38cc616401b304e"
+    "_id": "5fae19b2c38cc616401b304e",
+    "password": "123456"
   },
   {
     "firstName": "Alta",
@@ -41,7 +44,8 @@
     "country": "Sweden",
     "city": "Fagersta",
     "address": "78914 Bunker Hill Avenue",
-    "_id": "5fae19b2c38cc616401b304a"
+    "_id": "5fae19b2c38cc616401b304a",
+    "password": "123456"
   },
   {
     "firstName": "Ignatius",
@@ -52,7 +56,8 @@
     "country": "France",
     "city": "Paris 16",
     "address": "7 Sutteridge Plaza",
-    "_id": "5fae19b2c38cc616401b304d"
+    "_id": "5fae19b2c38cc616401b304d",
+    "password": "123456"
   },
   {
     "firstName": "Astra",
@@ -63,7 +68,8 @@
     "country": "Philippines",
     "city": "Giporlos",
     "address": "95 Holmberg Lane",
-    "_id": "5fae19b2c38cc616401b3049"
+    "_id": "5fae19b2c38cc616401b3049",
+    "password": "123456"
   },
   {
     "firstName": "Laurens",
@@ -74,7 +80,8 @@
     "country": "Russia",
     "city": "Uchkulan",
     "address": "21753 School Terrace",
-    "_id": "5fae19b2c38cc616401b3051"
+    "_id": "5fae19b2c38cc616401b3051",
+    "password": "123456"
   },
   {
     "firstName": "William",
@@ -85,7 +92,8 @@
     "country": "Brazil",
     "city": "São Gotardo",
     "address": "6054 Arrowood Terrace",
-    "_id": "5fae19b2c38cc616401b3048"
+    "_id": "5fae19b2c38cc616401b3048",
+    "password": "123456"
   },
   {
     "firstName": "Olenolin",
@@ -96,7 +104,8 @@
     "country": "China",
     "city": "Yongtai",
     "address": "80898 Parkside Street",
-    "_id": "5fae19b2c38cc616401b3050"
+    "_id": "5fae19b2c38cc616401b3050",
+    "password": "123456"
   },
   {
     "firstName": "Randene",
@@ -107,7 +116,8 @@
     "country": "North Korea",
     "city": "Kosan",
     "address": "7 Mitchell Park",
-    "_id": "5fae19b2c38cc616401b304c"
+    "_id": "5fae19b2c38cc616401b304c",
+    "password": "123456"
   },
   {
     "firstName": "Sebastian",
@@ -118,6 +128,7 @@
     "country": "Colombia",
     "city": "Medellín",
     "address": "Medellín - Colombia, Cra 29 # 47 - 86",
-    "_id": "5faf1130b8e5df2bccaa87d4"
+    "_id": "5faf1130b8e5df2bccaa87d4",
+    "password": "123456"
   }
 ]

@@ -5,13 +5,11 @@ const User = require('../models/User');
 // @desc   Get threads created by a specific user
 // @route  GET /api/v1/answers // I'm not sure if getting all the answers posted would be convenient...
 // @route  GET /api/v1/threads/:threadId/answers -> use a rerouter here
-// @route  GET /api/v1/users/:userId/answers // hmmm... what a mess. I must create one for threads, then! -> /:userId/threads
+// @route  // hmmm... what a mess. I must creaGET /api/v1/users/:userId/answers te one for threads, then! -> /:userId/threads
 // @route  GET /api/v1/threads/:threadId/:userId
 // @access Public
 exports.getAnswers = async (req, res, next) => {
-  // let answers; // refactor the code below by using a variable here!
   if (req.params.username && req.params.threadId) {
-    // Gotta put this in another function!
     console.log('Get answers submitted in a thread by user with id.');
     const answers = await Answer.find({
       author: req.params.username,
@@ -52,13 +50,12 @@ exports.getAnswers = async (req, res, next) => {
 // @access Public
 
 exports.submitAnswer = async (req, res, next) => {
-  // const thread = id of thread after clicking the button to enter the thread!
-  // click on link -> res.thread = thread
+  console.log('FUCK THIS SHIT!');
+  console.log(req.user);
 
   // user = logged in user (middleware)
-  // const loggedInUser = '5faf1130b8e5df2bccaa87d4'; // sebas
   const username = 'sebas_pm';
-  req.body.author = loggedInUser;
+  req.body.author = username;
   req.body.thread = req.params.threadId;
 
   const thread = await Thread.findById(req.params.threadId);

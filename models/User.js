@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
 const { ObjectId } = Schema;
 const geocoder = require('../utils/geocoder');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const UserSchema = new Schema({
   firstName: {
@@ -30,7 +33,6 @@ const UserSchema = new Schema({
   password: {
     type: String,
     minlength: 6,
-    default: '123456',
     select: false
   },
   //   location: {},
@@ -95,6 +97,8 @@ const UserSchema = new Schema({
     zipcode: String,
     country: String
   },
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
   createdAt: {
     type: Date,
     default: Date.now
@@ -121,34 +125,6 @@ const UserSchema = new Schema({
   ]
 });
 
-// Okay... I already know why the code below is not working as expected. As you can see,
-// the call of the next function is outside the then block. As a result, it's running
-// before the promise has resolved! so, in a nutshell, the code inside the then block
-// is not doing anything at all!
-
-// UserSchema.pre('save', function (next) {
-//   console.log(this);
-
-//   geocoder.geocode(this.address).then((data) => {
-//     const [location] = data; // this is the same as data[0]
-//     console.log(location);
-//     console.log(this);
-//     this.location = {
-//       type: 'Point',
-//       coordinates: [location.longitude, location.latitude],
-//       formattedAddress: location.formattedAddress,
-//       street: location.streetName,
-//       city: location.city,
-//       state: location.stateCode,
-//       country: location.countryCode,
-//       zipcode: location.zipcode
-//     };
-//   });
-//   this.location = 'Lsda';
-//   this.avatar = 'PAto';
-//   next();
-// });
-
 UserSchema.pre('save', function (next) {
   geocoder
     .geocode(`${this.city}, ${this.country} - ${this.address}`)
@@ -173,5 +149,51 @@ UserSchema.pre('save', function (next) {
       next();
     });
 });
+
+// Encrypt password using bcrypt
+UserSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    // If the password hasn't changed, just move on (next()).
+    // When you create a new user, the password field will change and the code below will run.
+    // Same thing when you change your password!
+
+    // Now, here's something I just learnt! I had the password field set to 123456 by default,
+    // and when I ran the seeder, this middleware didn't run... so it seems this method won't be
+    // executed if a value has been set by default. Perhaps default runs before everything else?
+    next();
+  }
+
+  // This down here will only run if the password field has changed!
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.methods.getSignedJwtToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE
+  });
+};
+
+// Generate and hash password token
+// This one is called on the instances of User, not on the model itself.
+UserSchema.methods.getResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash token and set to resetPasswordToken field
+  this.resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  // Set resetPasswordExpire
+  this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
+
+  return resetToken;
+};
+
+// Match user entered password to hashed password in database
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
 
 module.exports = model('User', UserSchema);

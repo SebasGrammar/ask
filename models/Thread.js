@@ -7,11 +7,6 @@ const ThreadSchema = new Schema({
     type: String,
     required: [true, 'You must add a title to your thread.']
   },
-  // author: {
-  //   type: ObjectId,
-  //   ref: 'User',
-  //   required: true
-  // },
   author: {
     type: String,
     ref: 'User',

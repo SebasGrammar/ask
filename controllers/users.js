@@ -17,7 +17,6 @@ exports.getUsers = async (req, res) => {
 // @route  GET /api/v1/users/:username
 // @access Public
 exports.getUser = async (req, res) => {
-  // const user = await User.findById(req.params.id); // Need to create an error handler
   console.log(req.params.username);
   const user = await User.find({
     username: req.params.username

@@ -17,11 +17,13 @@ app.use(express.json());
 
 // Get routes
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 const threads = require('./routes/threads');
 const answers = require('./routes/answers');
 
 // Mount routes
 app.use('/api/v1/users', users);
+app.use('/api/v1/auth', auth);
 app.use('/api/v1/threads', threads);
 app.use('/api/v1/answers', answers);
 
