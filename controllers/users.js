@@ -27,6 +27,16 @@ exports.getUser = async (req, res) => {
   });
 };
 
+// @desc   Get a single user
+// @route  GET /api/v1/users/me // or myprofile
+// @access Public
+exports.getLoggedInUser = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    data: req.user
+  })
+};
+
 // @desc   Create user
 // @route  POST /api/v1/users
 // @access Public

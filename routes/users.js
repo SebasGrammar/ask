@@ -6,7 +6,8 @@ const {
   getUser,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  getLoggedInUser
 } = require('../controllers/users');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -24,7 +25,7 @@ router.use('/:username/answers', answerRouter);
 router.use('/:username/answers/:threadId', answerRouter);
 
 router.route('/').get(getUsers).post(createUser);
-
+router.route('/me').get(getLoggedInUser);
 router.route('/:username').get(getUser).put(updateUser).delete(deleteUser);
 
 module.exports = router;
