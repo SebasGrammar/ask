@@ -158,6 +158,9 @@ UserSchema.pre('save', function (next) {
 
 // Encrypt password using bcrypt
 UserSchema.pre('save', async function (next) {
+  console.log('THIS SHIT IS RUNNING SO WATCH OUT');
+  // OHH.. so, for this middleware to run, this has to actually be a SAVE request.
+  // so if the request is, say, findByIdAndUpdate, this won't run!!
   if (!this.isModified('password')) {
     // If the password hasn't changed, just move on (next()).
     // When you create a new user, the password field will change and the code below will run.
