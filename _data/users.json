@@ -130,5 +130,17 @@
     "address": "Medellín - Colombia, Cra 29 # 47 - 86",
     "_id": "5faf1130b8e5df2bccaa87d4",
     "password": "123456"
+  },
+  {
+    "_id": "5fb7512192d3cd1dd0e45971",
+    "address": "17114 Towne Pass",
+    "avatar": "no-avatar.jpg",
+    "firstName": "Pato",
+    "lastName": "Donald",
+    "username": "patodonald",
+    "email": "patodonald@gmail.com",
+    "password": "123456",
+    "gender": "Male",
+    "role": "admin"
   }
 ]

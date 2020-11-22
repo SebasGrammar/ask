@@ -56,12 +56,18 @@ exports.protect = asyncHandler(async (req, res, next) => {
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      //   return next(
-      //     new ErrorResponse(
-      //       `User role ${req.user.role} is unauthorized to access this route.`,
-      //       403
-      //     )
-      //   );
+      console.log('BOBO');
+      console.log(roles);
+      console.log(req.user.firstName);
+      // return next(
+      //   new ErrorResponse(
+      //     `User role ${req.user.role} is unauthorized to access this route.`,
+      //     403
+      //   )
+      // );
+      return next(
+        `User role ${req.user.role} is unauthorized to access this route.`
+      );
     }
     next();
   };

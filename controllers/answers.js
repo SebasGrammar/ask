@@ -54,8 +54,11 @@ exports.submitAnswer = async (req, res, next) => {
   console.log(req.user);
 
   // user = logged in user (middleware)
-  const username = 'sebas_pm';
-  req.body.author = username;
+  // const username = 'el_perro';
+  // const username = req.user.username;
+  // req.body.author = username;
+
+  req.body.author = req.user.username;
   req.body.thread = req.params.threadId;
 
   const thread = await Thread.findById(req.params.threadId);

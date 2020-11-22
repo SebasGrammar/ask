@@ -21,6 +21,11 @@ const UserSchema = new Schema({
     unique: true
   },
   slug: String,
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
   email: {
     type: String,
     required: [true, 'Please add an email.'],
@@ -33,7 +38,8 @@ const UserSchema = new Schema({
   password: {
     type: String,
     minlength: 6,
-    select: false
+    select: false,
+    required: [true, 'Please enter a password.']
   },
   //   location: {},
   gender: {

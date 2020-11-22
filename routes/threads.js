@@ -23,6 +23,6 @@ router.use('/:threadId/answers', answerRouter); // When you do this, you have to
 
 router.route('/').get(getThreads).post(protect, createThread); // this is both /users/:userId/threads and /threads because of mergeParams.
 
-router.route('/:id').get(getThread).post(saveThread).put(updateThread);
+router.route('/:id').get(getThread).post(protect, saveThread).put(protect, updateThread);
 
 module.exports = router;

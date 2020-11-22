@@ -126,16 +126,19 @@ exports.updateThread = async (req, res) => {
 // @desc   Save thread // What about answer Thread? it should definitely be a post request, too! it could be something like... if req.body, that means it's an answer. Otherwise, it's a save therad request.
 // @route  POST /api/v1/threads/:id
 // @access Private
-exports.saveThread = async (req, res) => {
-  const loggedInUser = '5faf1130b8e5df2bccaa87d4'; // Sebas
+exports.saveThread = async (req, res, next) => {
+  // const loggedInUser = '5faf1130b8e5df2bccaa87d4'; // Sebas
+  const loggedInUser = req.user; // Sebas
 
   let user = await User.findById(loggedInUser);
+
+  // console.log(user);
 
   if (!Object.keys(req.body).length) {
     // Check if req.body is empty. If it is, that means the user clicked on save thread (or something equivalent).
     // The fact that it's empty means, of course, that it's not an answer.
     console.log('The body is empty. Just save the thread. ');
-    user.savedQuestions.push(req.params.id);
+    user.savedQuestions.push(req.params.id); // More like saved threads!!
 
     res.status(200).json({
       success: true,
@@ -145,7 +148,16 @@ exports.saveThread = async (req, res) => {
     });
   } else {
     // Now... of course I have to find a way to save the answers, too. And for that, I'm gonna have to use an Answer model.
-    user.answeredQuestions.push(req.params.id);
+    user.answeredQuestions.push(req.params.id); // More like answered threads!!!
+    console.log(user.answeredQuestions);
+    console.log(req.user.username);
     // Come to think of it... I don't think it's a good idea to have question-related functionality here in the threads controller...
+    res.status(200).json({
+      success: true,
+      data: await user.populate({
+        path: 'answeredQuestions'
+      })
+    });
   }
+  next();
 };
