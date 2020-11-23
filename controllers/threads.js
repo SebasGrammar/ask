@@ -133,9 +133,11 @@ exports.updateThread = async (req, res) => {
 // @access Private
 exports.saveThread = async (req, res, next) => {
   // const loggedInUser = '5faf1130b8e5df2bccaa87d4'; // Sebas
-  const loggedInUser = req.user.id; // Sebas
+  const loggedInUser = req.user; // Sebas
 
-  let user = await User.findById(loggedInUser);
+  let user = await User.findById(loggedInUser.id).populate({
+    path: 'savedQuestions answeredQuestions'
+  }); // WHAT THE ACTUAL FUCK! THIS HAS TO BE HERE, THIS HAS TO BE CALLED FROM THE FUCKING MODEL! NOT AN INSTANCE.
 
   console.log(user);
   // let user = await User.findById(loggedInUser).select('savedQuestions');
@@ -149,50 +151,17 @@ exports.saveThread = async (req, res, next) => {
     // user.savedQuestions.push(req.params.id); // More like saved threads!!
 
     if (!user.savedQuestions.includes(req.params.id)) {
-      await user.updateOne({
-        $push: {
-          savedQuestions: req.params.id
-        }
-      });
+      // console.log('PF');
+      // user = await user.updateOne({
+      //   $push: {
+      //     savedQuestions: req.params.id
+      //   }
+      // });
+      user.savedQuestions.push(req.params.id);
+      user.save({ validateBeforeSave: false });
     }
 
-    // console.log(
-    //   await Thread.findOne({ // the submittedAnswers array is fucking empty! DAMN! fuck...
-    //     _id: req.params.id
-    //   })
-    // );
-
-    // console.log(
-    //   await Thread.findOne({
-    //     _id: req.params.id
-    //   })
-    // );
-
-    //console.log(populatedThreads);
-
-    // await user.save(); // Since this is a save request, the middleware that runs on 'save' is going to run here! damn..
-    // Use this option instead:
-    // await user.save({ validateBeforeSave: false });
-
-    // console.log(
-    //   await user.populate({
-    //     path: 'savedQuestions'
-    //   })
-    // );
-
-    // res.status(200).json({
-    //   success: true,
-    //   data: await user.populate({
-    //     path: 'savedQuestions'
-    //   })
-    // });
-
-    // res.status(200).json({
-    //   success: true,
-    //   data: await user.populate({
-    //     path: 'savedQuestions'
-    //   })
-    // });
+    console.log(user);
 
     // User.findById(req.user.id)
     //   .populate({ path: 'savedQuestions' })
@@ -200,21 +169,10 @@ exports.saveThread = async (req, res, next) => {
     //     console.log(data);
     //   }); // Well... this actually works.
 
-    User.findById(req.user.id)
-      .populate({ path: 'savedQuestions' })
-      .then((data) => {
-        res.status(200).json({
-          success: true,
-          data
-        });
-      });
-
-    // res.status(200).json({
-    //   success: true,
-    //   data: await user.populate({
-    //     path: 'savedQuestions'
-    //   })
-    // });
+    res.status(200).json({
+      success: true,
+      data: user
+    });
   } else {
     // Now... of course I have to find a way to save the answers, too. And for that, I'm gonna have to use an Answer model.
     // user.answeredQuestions.push(req.params.id); // More like answered threads!!!
