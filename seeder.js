@@ -34,6 +34,7 @@ const answers = JSON.parse(
 
 const importData = async () => {
   try {
+    await User.syncIndexes();
     await User.create(users); // Refactor this! :D
     await Thread.create(threads);
     await Answer.create(answers);
