@@ -10,16 +10,20 @@ const Answer = require('../models/Answer');
 // @route  GET /api/v1/users/:userId/threads -> should I add /saved, /created and /answered? YES!
 // @access Public
 exports.getThreads = async (req, res) => {
-  if (req.params.userId) {
+  if (req.params.username) {
     // TEST
 
-    const user = await User.findById(req.params.userId).select(
+    // const user = await User.findById(req.params.username).select(
+    //   'firstName lastName'
+    // );
+
+    const user = await User.findOne({ username: req.params.username }).select(
       'firstName lastName'
     );
 
     /*******TEST ABOVE **********/
     const threads = await Thread.find({
-      author: req.params.userId
+      author: req.params.username
     });
 
     res.status(200).json({
@@ -58,11 +62,11 @@ exports.getThread = async (req, res) => {
 exports.createThread = async (req, res) => {
   // req.body.author = req.params.id; // This is of type ObjectId // NO!
 
-  const sebas = '5faf1130b8e5df2bccaa87d4'; // signed in user, of course! gotta deal with this later.
+  // const sebas = '5faf1130b8e5df2bccaa87d4'; // signed in user, of course! gotta deal with this later.
 
-  req.body.author = sebas; // This is of type ObjectId
+  req.body.author = req.user.username; // This is of type ObjectId
 
-  const user = await User.findById(sebas); // I believe I should do this in the model itself, not here
+  const user = await User.findById(req.user._id); // I believe I should do this in the model itself, not here
 
   const thread = await Thread.create(req.body); // Need to create an error handler
 
@@ -70,6 +74,7 @@ exports.createThread = async (req, res) => {
 
   res.status(200).json({
     success: true,
+    author: req.body.author,
     data: thread
   });
 };
@@ -138,7 +143,17 @@ exports.saveThread = async (req, res, next) => {
     // Check if req.body is empty. If it is, that means the user clicked on save thread (or something equivalent).
     // The fact that it's empty means, of course, that it's not an answer.
     console.log('The body is empty. Just save the thread. ');
-    user.savedQuestions.push(req.params.id); // More like saved threads!!
+    // user.savedQuestions.push(req.params.id); // More like saved threads!!
+
+    await user.update({
+      $push: {
+        savedQuestions: req.params.id
+      }
+    });
+
+    // await user.save(); // Since this is a save request, the middleware that runs on 'save' is going to run here! damn..
+    // Use this option instead:
+    // await user.save({ validateBeforeSave: false });
 
     res.status(200).json({
       success: true,
@@ -148,10 +163,19 @@ exports.saveThread = async (req, res, next) => {
     });
   } else {
     // Now... of course I have to find a way to save the answers, too. And for that, I'm gonna have to use an Answer model.
-    user.answeredQuestions.push(req.params.id); // More like answered threads!!!
-    console.log(user.answeredQuestions);
-    console.log(req.user.username);
-    // Come to think of it... I don't think it's a good idea to have question-related functionality here in the threads controller...
+    // user.answeredQuestions.push(req.params.id); // More like answered threads!!!
+    // // console.log(user.answeredQuestions);
+    // // console.log(req.user.username);
+    // // Come to think of it... I don't think it's a good idea to have question-related functionality here in the threads controller...
+
+    // await user.save(); // This is going to trigger the middleware that runs on 'save', and I don't want that!
+
+    await user.update({
+      $push: {
+        answeredQuestions: req.params.id
+      }
+    });
+
     res.status(200).json({
       success: true,
       data: await user.populate({
@@ -159,5 +183,9 @@ exports.saveThread = async (req, res, next) => {
       })
     });
   }
+
   next();
 };
+
+// Get saved threads
+// Get answered threads... still remaining.

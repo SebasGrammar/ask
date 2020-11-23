@@ -54,19 +54,39 @@ exports.createUser = async (req, res) => {
 // @desc   Update user
 // @route  PUT /api/v1/users/:id // which is actually username... damn. Gotta homogenize this.
 // @access Private
-exports.updateUser = async (req, res) => {
+exports.updateUser = async (req, res, next) => {
   // I can change the password from here. That shouldn't be the case! gotta fix that
   // const user = await User.findByIdAndUpdate(req.params.id, req.body, {
   //   new: true,
   //   runValidators: true
   // });
 
-  const user = await User.findByIdAndUpdate(req.params.username, req.body, {
-    new: true,
-    runValidators: true
-  });
+  // Since this command uses findByIdAndUpdate, the middleware functions that are triggered on 'save'
+  // won't run at all! what's below won't go through the middleware for hashing passwords.
 
-  console.log(user);
+  // const user = await User.findByIdAndUpdate(req.params.username, req.body, {
+  //   new: true,
+  //   runValidators: true
+  // });
+
+  const { password, ...fieldsToUpdate } = req.body;
+
+  if (!Object.keys(fieldsToUpdate).length) {
+    res.status(401).json({
+      success: false,
+      data: 'No fields to update'
+    });
+    return next('No fields to update.');
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.params.username,
+    fieldsToUpdate,
+    {
+      new: true,
+      runValidators: true
+    }
+  );
 
   res.status(200).json({
     success: true,
