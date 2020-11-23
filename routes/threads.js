@@ -5,7 +5,9 @@ const {
   getThread,
   createThread,
   updateThread,
-  saveThread
+  saveThread,
+  getSavedThreads,
+  getAnsweredThreads
 } = require('../controllers/threads');
 const { update } = require('../models/User');
 const { protect } = require('../middleware/auth');
@@ -22,7 +24,12 @@ router.use('/:threadId/answers', answerRouter); // When you do this, you have to
 // router.route('/:id').get(getThread).post(createThread); // This can't be! the author of the thread has to come from somewhere else!
 
 router.route('/').get(getThreads).post(protect, createThread); // this is both /users/:userId/threads and /threads because of mergeParams.
-
-router.route('/:id').get(getThread).post(protect, saveThread).put(protect, updateThread);
+router.route('/saved').get(getSavedThreads);
+router.route('/answered').get(getAnsweredThreads);
+router
+  .route('/:id')
+  .get(getThread)
+  .post(protect, saveThread)
+  .put(protect, updateThread);
 
 module.exports = router;

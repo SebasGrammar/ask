@@ -23,6 +23,7 @@ const answerRouter = require('./answers');
 
 // Re-route into other resouce routes
 router.use('/:username/threads', threadRouter);
+router.use('/:username/threads/saved', threadRouter);
 router.use('/:username/answers', answerRouter);
 router.use('/:username/answers/:threadId', answerRouter);
 
@@ -33,5 +34,7 @@ router
   .get(getUser)
   .put(protect, updateUser)
   .delete(protect, authorize('admin'), deleteUser);
+
+
 
 module.exports = router;

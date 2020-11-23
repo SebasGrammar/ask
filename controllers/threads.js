@@ -203,3 +203,35 @@ exports.saveThread = async (req, res, next) => {
 
 // Get saved threads
 // Get answered threads... still remaining.
+
+// @desc   Get threads saved by user
+// @route  GET /api/v1/users/:username/threads/saved
+// @access Public
+exports.getSavedThreads = async (req, res) => {
+  console.log('GET SAVED THREADS');
+  const user = await User.findOne({ username: req.params.username }).populate({
+    path: 'savedQuestions'
+  });
+
+  res.status(200).json({
+    success: true,
+    data: user.savedQuestions
+  });
+};
+
+// @desc   Get threads saved by user
+// @route  GET /api/v1/users/:username/threads/saved
+// @access Public
+exports.getAnsweredThreads = async (req, res) => {
+  console.log('GET ANSWERED THREADS');
+  const user = await User.findOne({ username: req.params.username }).populate({
+    path: 'answeredQuestions'
+  });
+
+  console.log(user.answeredQuestions);
+
+  res.status(200).json({
+    success: true,
+    data: user.answeredQuestions
+  });
+};
