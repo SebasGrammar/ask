@@ -3,25 +3,20 @@ const Thread = require('../models/Thread');
 const User = require('../models/User');
 const Answer = require('../models/Answer');
 
-// Or should it be /api/v1/users/:userId/threads ? DONE. Did this by merging parameters.
+const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../utils/ErrorResponse');
 
 // @desc   Get threads created by a specific user
 // @route  GET /api/v1/threads
-// @route  GET /api/v1/users/:userId/threads -> should I add /saved, /created and /answered? YES!
+// @route  GET /api/v1/users/:userId/threads
 // @access Public
-exports.getThreads = async (req, res) => {
+
+exports.getThreads = asyncHandler(async (req, res) => {
   if (req.params.username) {
-    // TEST
-
-    // const user = await User.findById(req.params.username).select(
-    //   'firstName lastName'
-    // );
-
     const user = await User.findOne({ username: req.params.username }).select(
       'firstName lastName'
     );
 
-    /*******TEST ABOVE **********/
     const threads = await Thread.find({
       author: req.params.username
     });
@@ -32,18 +27,20 @@ exports.getThreads = async (req, res) => {
       data: threads
     });
   } else {
-    const threads = await Thread.find();
-    res.status(200).json({
-      success: true,
-      data: threads
-    });
+    // const threads = await Thread.find();
+
+    res.status(200).json(res.advancedResults);
+    // res.status(200).json({
+    //   success: true,
+    //   data: threads
+    // });
   }
-};
+});
 
 // @desc   Get a specific thread
 // @route  GET /api/v1/threads/:id
 // @access Public
-exports.getThread = async (req, res) => {
+exports.getThread = asyncHandler(async (req, res) => {
   //req.body.author = req.params.id; // This is of type ObjectId
 
   const thread = await Thread.findById(req.params.id);
@@ -54,12 +51,12 @@ exports.getThread = async (req, res) => {
     success: true,
     data: thread
   });
-};
+});
 
 // @desc   Create thread
 // @route  POST /api/v1/threads
 // @access Private
-exports.createThread = async (req, res) => {
+exports.createThread = asyncHandler(async (req, res) => {
   // req.body.author = req.params.id; // This is of type ObjectId // NO!
 
   // const sebas = '5faf1130b8e5df2bccaa87d4'; // signed in user, of course! gotta deal with this later.
@@ -77,12 +74,12 @@ exports.createThread = async (req, res) => {
     author: req.body.author,
     data: thread
   });
-};
+});
 
 // @desc   Create thread
 // @route  PUT /api/v1/threads/:id
 // @access Private
-exports.updateThread = async (req, res) => {
+exports.updateThread = asyncHandler(async (req, res) => {
   const thread = await Thread.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
@@ -92,7 +89,7 @@ exports.updateThread = async (req, res) => {
     success: true,
     data: thread
   });
-};
+});
 
 // // @desc   Save thread // What about answer Thread? it should definitely be a post request, too! it could be something like... if req.body, that means it's an answer. Otherwise, it's a save therad request.
 // // @route  POST /api/v1/threads/:id
@@ -131,7 +128,7 @@ exports.updateThread = async (req, res) => {
 // @desc   Save thread // What about answer Thread? it should definitely be a post request, too! it could be something like... if req.body, that means it's an answer. Otherwise, it's a save therad request.
 // @route  POST /api/v1/threads/:id
 // @access Private
-exports.saveThread = async (req, res, next) => {
+exports.saveThread = asyncHandler(async (req, res, next) => {
   // const loggedInUser = '5faf1130b8e5df2bccaa87d4'; // Sebas
   const loggedInUser = req.user; // Sebas
 
@@ -199,7 +196,29 @@ exports.saveThread = async (req, res, next) => {
   }
 
   next();
-};
+});
 
 // Get saved threads
 // Get answered threads... still remaining.
+
+// @desc   Test
+// @route  GET /api/v1/threads/test
+// @access Private
+exports.test = asyncHandler(async (req, res) => {
+
+  // these queries are 'cumulative'. You can keep adding to them until you
+  // decide to await the promise's fulfillment.
+
+  let thread = Thread.find();
+
+  thread = thread.select('author');
+
+  thread = thread.select('title');
+
+  thread = await thread;
+
+  res.status(200).json({
+    success: true,
+    data: thread
+  });
+});

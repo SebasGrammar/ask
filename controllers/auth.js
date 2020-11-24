@@ -2,7 +2,9 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+
 const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../utils/ErrorResponse');
 
 // @desc   Register user
 // @route  POST /api/v1/auth/register
@@ -18,10 +20,6 @@ exports.register = asyncHandler(async (req, res, next) => {
     address,
     gender
   } = req.body;
-  // role should go in there, too.
-
-  console.log('BAAAAAA');
-  console.log(address);
 
   const user = await User.create({
     firstName,
@@ -44,14 +42,21 @@ exports.register = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
-  console.log('FUCK');
-
   // Validate email and password
 
   if (!email || !password) {
-    return next(
-      new ErrorResponse('Please provide an email and a password.', 400)
-    );
+    let message =
+      !email && !password
+        ? 'an email and a password'
+        : !email
+        ? 'an email'
+        : 'a password';
+
+    // return next(
+    //   new ErrorResponse('Please provide an email and a password.', 400)
+    // );
+
+    return next(new ErrorResponse(`Please provide ${message}.`, 400));
   }
 
   // Check for user
@@ -60,24 +65,12 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials.', 401));
   }
 
-  console.log(user);
-
   // Check if password matches
   const isMatch = await user.matchPassword(password);
-
-  console.log(isMatch);
 
   if (!isMatch) {
     return next(new ErrorResponse('Invalid credentials.', 401));
   }
-
-  //   // Create token
-  //   const token = user.getSignedJwtToken();
-
-  //   res.status(200).json({
-  //     success: true,
-  //     token: token
-  //   });
 
   sendTokenResponse(user, 200, res);
 });
@@ -113,7 +106,6 @@ const sendTokenResponse = (user, statusCode, res) => {
   }
 
   res.status(statusCode).cookie('token', token, options).json({
-    // token is the name of the cookie we are sending! of course it can be whatever you want.
     success: true,
     token
   });

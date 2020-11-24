@@ -2,40 +2,59 @@ const Answer = require('../models/Answer');
 const Thread = require('../models/Thread');
 const User = require('../models/User');
 
+const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../utils/ErrorResponse');
+
 // @desc   Get threads created by a specific user
-// @route  GET /api/v1/answers // I'm not sure if getting all the answers posted would be convenient...
-// @route  GET /api/v1/threads/:threadId/answers -> use a rerouter here
-// @route  // hmmm... what a mess. I must creaGET /api/v1/users/:userId/answers te one for threads, then! -> /:userId/threads
+// @route  GET /api/v1/answers
+// @route  GET /api/v1/threads/:threadId/answers
 // @route  GET /api/v1/threads/:threadId/:userId
 // @access Public
-exports.getAnswers = async (req, res, next) => {
+
+exports.getAnswers = asyncHandler(async (req, res, next) => {
   if (req.params.username && req.params.threadId) {
-    console.log('Get answers submitted in a thread by user with id.');
     const answers = await Answer.find({
       author: req.params.username,
       thread: req.params.threadId
     });
+
+    if (!answers) {
+      return next(new ErrorResponse('No resources were found.', 404));
+    }
+
     res.status(200).json({
       success: true,
       data: answers
     });
   } else if (req.params.threadId) {
-    console.log('The request comes from threads');
     const answers = await Answer.find({ thread: req.params.threadId });
+
+    if (!answers) {
+      return next(new ErrorResponse('No resources were found.', 404));
+    }
+
     res.status(200).json({
       success: true,
       data: answers
     });
   } else if (req.params.username) {
-    console.log('The request comes from users');
     const answers = await Answer.find({ author: req.params.username });
+
+    if (!answers) {
+      return next(new ErrorResponse('No resources were found.', 404));
+    }
+
     res.status(200).json({
       success: true,
       data: answers
     });
   } else {
-    console.log('Just get the fucking answers');
     const answers = await Answer.find();
+
+    if (!answers) {
+      return next(new ErrorResponse('No resources were found.', 404));
+    }
+
     res.status(200).json({
       success: true,
       count: answers.length,
@@ -43,21 +62,66 @@ exports.getAnswers = async (req, res, next) => {
     });
   }
   next();
-};
+});
+
+// exports.getAnswers = asyncHandler(async (req, res, next) => {
+//   if (req.params.username && req.params.threadId) {
+//     const answers = await Answer.find({
+//       author: req.params.username,
+//       thread: req.params.threadId
+//     });
+
+//     if (!answers) {
+//       return next(new ErrorResponse('No resources were found.', 404));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: answers
+//     });
+//   } else if (req.params.threadId) {
+//     const answers = await Answer.find({ thread: req.params.threadId });
+
+//     if (!answers) {
+//       return next(new ErrorResponse('No resources were found.', 404));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: answers
+//     });
+//   } else if (req.params.username) {
+//     const answers = await Answer.find({ author: req.params.username });
+
+//     if (!answers) {
+//       return next(new ErrorResponse('No resources were found.', 404));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       data: answers
+//     });
+//   } else {
+//     const answers = await Answer.find();
+
+//     if (!answers) {
+//       return next(new ErrorResponse('No resources were found.', 404));
+//     }
+
+//     res.status(200).json({
+//       success: true,
+//       count: answers.length,
+//       data: answers
+//     });
+//   }
+//   next();
+// });
 
 // @desc   Submit answer to thread
 // @route  POST /api/v1/threads/:threadId/answers
 // @access Public
 
-exports.submitAnswer = async (req, res, next) => {
-  console.log('FUCK THIS SHIT!');
-  console.log(req.user);
-
-  // user = logged in user (middleware)
-  // const username = 'el_perro';
-  // const username = req.user.username;
-  // req.body.author = username;
-
+exports.submitAnswer = asyncHandler(async (req, res, next) => {
   req.body.author = req.user.username;
   req.body.thread = req.params.threadId;
 
@@ -69,4 +133,4 @@ exports.submitAnswer = async (req, res, next) => {
     success: true,
     data: answer
   });
-};
+});

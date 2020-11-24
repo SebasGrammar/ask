@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const errorHandler = require('./middleware/error');
 const dotenv = require('dotenv');
 
 const connectDB = require('./config/db');
@@ -26,6 +27,8 @@ app.use('/api/v1/users', users);
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/threads', threads);
 app.use('/api/v1/answers', answers);
+
+app.use(errorHandler);
 
 connectDB();
 
