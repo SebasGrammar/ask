@@ -128,6 +128,12 @@ const UserSchema = new Schema({
       type: ObjectId,
       ref: 'Thread'
     }
+  ],
+  likes: [
+    {
+      type: ObjectId,
+      ref: 'Answer'
+    }
   ]
 });
 

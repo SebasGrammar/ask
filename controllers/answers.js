@@ -64,22 +64,57 @@ exports.getAnswers = asyncHandler(async (req, res, next) => {
   next();
 });
 
-// @desc   Submit answer to thread
+// Like answer, dislike answer... answer answer. lol // more features
+
+// @desc   Submit answer to thread or like answer
 // @route  POST /api/v1/threads/:threadId/answers
-// @access Public
+// @access Private
 
 exports.submitAnswer = asyncHandler(async (req, res, next) => {
-  req.body.author = req.user.username;
-  req.body.thread = req.params.threadId;
+  if (!Object.keys(req.body).length) {
+    console.log(req.user.id); // jwt.sign({ id: this._id }
+    console.log(req.user.likes);
 
-  const thread = await Thread.findById(req.params.threadId);
+    // if (!req.user.likes.includes(req.params.threadId)) { // No... this is for users! not answers.
+    if (!req.user.likes.includes(req.user.id)) {
+      await req.user.updateOne({
+        $push: {
+          likes: req.user.id
+        }
+      });
+      console.log(req.user.likes);
+    } else {
+      await req.user.updateOne({
+        $pull: {
+          likes: req.user.id
+        }
+      });
+    }
 
-  const answer = await Answer.create(req.body);
+    res.status(200).json({
+      success: true,
+      data: `You liked the answer with the id ${req.params.threadId}`
+    });
+  } else {
+    req.body.author = req.user.username;
+    req.body.thread = req.params.threadId;
 
-  res.status(200).json({
-    success: true,
-    data: answer
-  });
+    const thread = await Thread.findById(req.params.threadId);
+
+    const answer = await Answer.create(req.body);
+
+    res.status(200).json({
+      success: true,
+      data: answer
+    });
+  }
+
+  // const thread = await Thread.findById(req.params.threadId);
+
+  // const answer = await Answer.create(req.body);
+
+  // res.status(200).json({
+  //   success: true,
+  //   data: answer
+  // });
 });
-
-// Like answer, dislike answer... answer answer. lol // more features

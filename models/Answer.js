@@ -17,7 +17,13 @@ const AnswerSchema = new Schema({
     type: String,
     ref: 'User',
     required: true
-  }
+  },
+  likes: [
+    {
+      type: ObjectId,
+      ref: 'User'
+    }
+  ]
 });
 
 module.exports = model('Answer', AnswerSchema);
